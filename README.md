@@ -59,8 +59,8 @@ root/
 │   │   ├── models/                  # data models
 │   │   │   └── models.go
 │   │   ├── services/                # business logic and external integrations
-│   │   │   ├── collection_service.go
-│   │   │   └── product_service.go
+│   │   │   ├── collections_service.go
+│   │   │   └── products_service.go
 │   │   ├── middleware/              # custom middleware (e.g., authentication, logging)
 │   │   │   ├── cors_middleware.go
 │   │   │   └── logging_middleware.go
