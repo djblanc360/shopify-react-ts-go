@@ -6,12 +6,15 @@ import (
 	"server/internal/services"
 
 	"github.com/gorilla/mux"
+
+	"fmt"
 )
 
 func GetCollectionHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
+	fmt.Printf("in Go collection handler, id: %v\n", id)
 	collection, err := services.FetchCollection(id)
 	if err != nil {
 		http.Error(w, "Collection not found", http.StatusNotFound)

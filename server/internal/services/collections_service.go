@@ -29,11 +29,12 @@ func FetchCollection(id string) (*models.Collection, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("failed to fetch product")
+		return nil, errors.New("failed to fetch collection")
 	}
 	var result struct {
 		Collection models.Collection `json:"collection"`
 	}
+	fmt.Printf("in Go collection service, result: %v\n", result)
 
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
