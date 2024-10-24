@@ -1,6 +1,6 @@
 import type { Product } from "./Product";
 
-export interface Collection {
+export type Collection = {
     id: number
     title: string
     handle: string

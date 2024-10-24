@@ -1,5 +1,8 @@
 package models
 
+// MAY NOT NEED, WILL BE USING:
+// map[string]interface{}
+
 type Product struct {
 	ID          int64    `json:"id"`
 	Title       string   `json:"title"`

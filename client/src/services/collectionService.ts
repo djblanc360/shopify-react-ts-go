@@ -1,7 +1,7 @@
 import type { Collection } from '../types/Collection'
 
-export const getCollection = async (id: string): Promise<Partial<Collection>> => {
-    const response = await fetch(`/api/collections/${id}`)
+export const getCollection = async (handle: string): Promise<Partial<Collection>> => {
+    const response = await fetch(`/api/collections/${handle}`)
     if (!response.ok) {
       throw new Error('Failed to fetch collection')
     }

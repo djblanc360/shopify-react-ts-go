@@ -4,10 +4,10 @@ import type { Collection } from "../types/Collection"
 
 
 // hook to fetch and return collection data
-export const useCollectionData = (collectionId: string) => {
+export const useCollectionData = (collectionHandle: string) => {
     const { data: collection, loading, error } = useFetch<Partial<Collection>>(
-        () => getCollection(collectionId), // pas to `useFetch`
-        [collectionId] // dependency array, refetch id `collectionId` changes
+        () => getCollection(collectionHandle), // pas to `useFetch`
+        [collectionHandle] // dependency array, refetch handle `collectionHandle` changes
     );
 
     return { collection, loading, error }

@@ -2,8 +2,8 @@
 import { useCollectionData } from "@hooks/useCollectionData";
 
 
-const CollectionSection = ({ collectionId }: { collectionId: string }) => {
-    const { collection, loading, error } = useCollectionData(collectionId)
+const CollectionSection = ({ collectionHandle }: { collectionHandle: string }) => {
+    const { collection, loading, error } = useCollectionData(collectionHandle)
 
     if (loading) return <p>Loading...</p>
     if (error) return <p>{String(error)}</p>
@@ -23,7 +23,9 @@ import { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
 import { Collection } from '../types/Collection';
 
-const CollectionSection = ({ collectionId }: { collectionId: string }) => {
+const server = import.meta.env.VITE_SERVER_URL;
+
+const CollectionSection = ({ collectionHandle }: { collectionHandle: string }) => {
   const [collection, setCollection] = useState<Partial<Collection> | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +34,7 @@ const CollectionSection = ({ collectionId }: { collectionId: string }) => {
     const fetchCollection = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8080/api/collections/${collectionId}`);
+        const response = await fetch(`${server}/collections/${collectionHandle}`);
         console.log("Response object:", response);
         if (!response.ok) {
           throw new Error('Failed to fetch collection');
@@ -53,7 +55,7 @@ const CollectionSection = ({ collectionId }: { collectionId: string }) => {
     };
 
     fetchCollection();
-  }, [collectionId]);
+  }, [collectionHandle]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

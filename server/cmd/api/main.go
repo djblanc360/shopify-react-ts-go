@@ -28,11 +28,11 @@ func main() {
 	// register url paths and handlers
 	// product routes
 	// r.HandleFunc("/api/products", handlers.GetAllProductsHandler).Methods("GET")
-	r.HandleFunc("/api/products/{id}", handlers.GetProductHandler).Methods("GET")
+	r.HandleFunc("/api/products/{handle}", handlers.GetProductHandler).Methods("GET")
 
 	// collection routes
 	// r.HandleFunc("/api/collections", handlers.GetAllCollectionsHandler).Methods("GET")
-	r.HandleFunc("/api/collections/{id}", handlers.GetCollectionHandler).Methods("GET")
+	r.HandleFunc("/api/collections/{handle}", handlers.GetCollectionHandler).Methods("GET")
 	// r.HandleFunc("/api/search", handlers.SearchProductsHandler).Methods("GET")
 
 	// cart routes

@@ -1,4 +1,4 @@
-export interface ProductVariant {
+export type ProductVariant = {
   id: number
   product_id: number
   title: string
@@ -27,7 +27,7 @@ export interface ProductVariant {
   image_id: number | null
 }
 
-export interface ProductOption {
+export type ProductOption = {
   id: number
   product_id: number
   name: string
@@ -35,7 +35,7 @@ export interface ProductOption {
   values: string[]
 }
 
-export interface ProductImage {
+export type ProductImage = {
   id: number
   alt: string
   position: number
@@ -49,7 +49,7 @@ export interface ProductImage {
   variant_ids: number[]
 }
 
-export interface Product {
+export type Product = {
   id: number
   title: string
   body_html: string

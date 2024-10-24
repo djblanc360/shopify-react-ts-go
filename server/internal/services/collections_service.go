@@ -1,45 +1,61 @@
 package services
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
-	"net/http"
-	"os"
-	"server/internal/models"
+	"log"
 )
 
-func FetchCollection(id string) (*models.Collection, error) {
-	token := os.Getenv("SHOPIFY_ADMIN_TOKEN")
-	baseURL := os.Getenv("SHOPIFY_URL")
-	apiURL := fmt.Sprintf("%scollections/%s.json", baseURL, id)
+func FetchCollection(handle string) (map[string]interface{}, error) {
+	query := `
+    query getCollection($handle: String!) {
+        collectionByHandle(handle: $handle) {
+            id
+            title
+            products(first: 5) {
+                edges {
+                    node {
+                        id
+                        title
+                        handle
+                    }
+                }
+            }
+        }
+    }`
+	variables := map[string]interface{}{
+		"handle": handle,
+	}
 
-	req, err := http.NewRequest("GET", apiURL, nil)
+	// fetch collection
+	respData, err := gqlQuery(query, variables)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to fetch collection: %v", err)
 	}
 
-	req.Header.Add("X-Shopify-Access-Token", token)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("failed to fetch collection")
-	}
-	var result struct {
-		Collection models.Collection `json:"collection"`
-	}
-	fmt.Printf("in Go collection service, result: %v\n", result)
-
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return nil, err
+	// extract collection
+	collection := respData["collectionByHandle"].(map[string]interface{})
+	collectionProducts := map[string]interface{}{
+		"id":       collection["id"].(string),
+		"title":    collection["title"].(string),
+		"products": []map[string]interface{}{},
 	}
 
-	return &result.Collection, nil
+	// iterate over products in collection
+	productsData := collection["products"].(map[string]interface{})["edges"].([]interface{})
+
+	for _, productEdge := range productsData {
+		productNode := productEdge.(map[string]interface{})["node"].(map[string]interface{})
+		handle := productNode["handle"].(string)
+
+		// fetch product by handle
+		product, err := FetchProduct(handle)
+		if err != nil {
+			log.Printf("error fetching product details: %v\n", err)
+			continue
+		}
+		// append product to collection
+		collectionProducts["products"] = append(collectionProducts["products"].([]map[string]interface{}), product)
+	}
+
+	return collectionProducts, nil
 }

@@ -11,9 +11,9 @@ import (
 
 func GetProductHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["handle"]
+	handle := vars["handle"]
 
-	product, err := services.FetchProduct(id)
+	product, err := services.FetchProduct(handle)
 	if err != nil {
 		http.Error(w, "Product not found", http.StatusNotFound)
 		return
