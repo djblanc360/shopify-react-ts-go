@@ -11,6 +11,7 @@ func FetchCollection(handle string) (map[string]interface{}, error) {
         collectionByHandle(handle: $handle) {
             id
             title
+            handle
             products(first: 5) {
                 edges {
                     node {
@@ -19,6 +20,9 @@ func FetchCollection(handle string) (map[string]interface{}, error) {
                         handle
                     }
                 }
+            }
+            productsCount {
+                count
             }
         }
     }`
@@ -35,9 +39,10 @@ func FetchCollection(handle string) (map[string]interface{}, error) {
 	// extract collection
 	collection := respData["collectionByHandle"].(map[string]interface{})
 	collectionProducts := map[string]interface{}{
-		"id":       collection["id"].(string),
-		"title":    collection["title"].(string),
-		"products": []map[string]interface{}{},
+		"id":            collection["id"].(string),
+		"title":         collection["title"].(string),
+		"products":      []map[string]interface{}{},
+		"productsCount": collection["productsCount"].(map[string]interface{})["count"].(float64),
 	}
 
 	// iterate over products in collection

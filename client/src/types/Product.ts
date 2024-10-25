@@ -1,6 +1,35 @@
+export type FeaturedImage = {
+  url: string
+  alt: string
+}
+
+export type ProductImage = {
+  id: string
+  alt: string
+  position: number
+  product_id: string
+  created_at: string
+  updated_at: string
+  admin_graphql_api_id: string
+  width: number
+  height: number
+  url: string
+  variant_ids: number[]
+}
+
+export type SelectedOption = {
+  name: string
+  value: string
+  optionValue?: {
+    hasVariants: boolean
+    name: string
+    swatch: string | null
+  }
+}
+
 export type ProductVariant = {
-  id: number
-  product_id: number
+  id: string
+  product_id: string
   title: string
   price: string
   position: number
@@ -15,48 +44,37 @@ export type ProductVariant = {
   barcode: string
   fulfillment_service: string
   grams: number
-  inventory_management: string
   requires_shipping: boolean
   sku: string
   weight: number
   weight_unit: string
   inventory_item_id: number
   inventory_quantity: number
-  old_inventory_quantity: number
   admin_graphql_api_id: string
   image_id: number | null
+  selectedOptions?: SelectedOption[]
 }
 
 export type ProductOption = {
-  id: number
-  product_id: number
+  id: string
   name: string
   position: number
   values: string[]
 }
 
-export type ProductImage = {
-  id: number
-  alt: string
-  position: number
-  product_id: number
-  created_at: string
-  updated_at: string
-  admin_graphql_api_id: string
-  width: number
-  height: number
-  src: string
-  variant_ids: number[]
-}
 
 export type Product = {
-  id: number
+  id: string
   title: string
+  handle: string
+  description: string
   body_html: string
   vendor: string
   product_type: string
   created_at: string
-  handle: string
+  featured_image?: FeaturedImage
+  images: ProductImage[]
+  image?: ProductImage
   updated_at?: string
   published_at: string
   template_suffix?: string | null
@@ -66,8 +84,6 @@ export type Product = {
   admin_graphql_api_id: string
   variants: ProductVariant[]
   options?: ProductOption[]
-  images: ProductImage[]
-  image?: ProductImage
 }
 
 // interface ProductResponse {

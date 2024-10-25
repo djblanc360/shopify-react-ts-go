@@ -63,12 +63,10 @@ const CollectionSection = ({ collectionHandle }: { collectionHandle: string }) =
   return (
     <div>
       <h1>{collection?.title}</h1>
-      <div className="keen-slider">
-            <div className="keen-slider__slide">
-                {collection?.products?.map(product => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {collection?.products?.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
     </div>
   );
