@@ -1,8 +1,35 @@
+import { useState } from "react"
 import type { Product } from "../types/Product"
 
 const ProductCard = ({product}: {product: Product}) => {
+  const [selectedColor, setSelectedColor] = useState<string>('')
+  const [image, setImage] = useState<string>(product.images[0]?.url || "");
+  // console.log('product', product)
+
+  const colors: string[] = []
+  if (product?.variants?.length > 1) {
+    product.variants.forEach(variant => {
+      const color = variant?.selectedOptions?.find(option => option.name === "Color")?.value.toLowerCase();
+      if (typeof color === 'string' && !colors.includes(color)) {
+        colors.push(color)
+      }
+    })
+  }
+
+  if (colors.length > 0 && !selectedColor) {
+    setSelectedColor(colors[0]);
+  }
+
+  const handleSelectedColor = (color: string) => {
+    setSelectedColor(color);
+    const matchingImage = product.images.find((image) => image.alt.toLowerCase() === color)
+    if (matchingImage) {
+      setImage(matchingImage.url)
+    }
+  }
+
     return (
-        <div className="flex h-full flex-col">
+        <div className="flex h-full flex-col bg-white">
         <div className="relative flex w-full flex-col">
           <div className="group relative mb-[13px] w-full">
             <a className="mb-3 w-full" 
@@ -13,7 +40,7 @@ const ProductCard = ({product}: {product: Product}) => {
       
                 <div className="mix-blend-multiply">
                     {product.images.map((media, index) => (
-                    <img src={media.url}
+                    <img src={image}
                          alt={media.alt} 
                          className={`absolute inset-0 h-full w-full object-cover ${index === 0 ? 'opacity-100' : 'opacity-0'}`} 
                          width="100%" height="100%" 
@@ -56,14 +83,15 @@ const ProductCard = ({product}: {product: Product}) => {
           </div>
         </div>
           <div className="mt-2">
-               {product?.variants?.length > 1 && (
+               {colors.length > 1 && (
                 <div>
                   <ul className="flex flex-wrap gap-1 max-lg:[&>*:nth-child(n+5)]:hidden lg:[&>*:nth-child(n+7)]:hidden">
-                  {product.variants.map((variant) => {
-                    const color = variant?.selectedOptions?.find(option => option.name === "Color")?.value.toLowerCase();
-                    return (
-                      <li key={variant.id}>
-                        <button className="w-5 h-5 xs:w-6 xs:h-6 border-[1px] border-[#989898] rounded-full focus:outline-none" style={{backgroundColor: color}}></button>
+                  {colors.map((color, index) => {return (
+                      <li key={index}>
+                        <button 
+                          onClick={() => handleSelectedColor(color)}
+                          className={`bg-${color} w-5 h-5 xs:w-6 xs:h-6 border-[1px] border-[#989898] rounded-full focus:outline-none `}
+                        ></button>
                       </li>
                     )
                     })}
@@ -73,6 +101,6 @@ const ProductCard = ({product}: {product: Product}) => {
           </div>
       </div>      
     )
+  
 }
-
 export default ProductCard;
